@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper
+	namespace="com.zhiye.bhmall.modules.vote.mapper.UserTopicMapper">
+	<resultMap id="BaseResultMap"
+		type="com.zhiye.bhmall.modules.vote.domain.UserTopic">
+		<id column="ID" jdbcType="INTEGER" property="id" />
+		<result column="USER_ID" jdbcType="INTEGER" property="userId" />
+		<result column="TOPIC_ID" jdbcType="INTEGER" property="topicId" />
+	</resultMap>
+	<sql id="Base_Column_List">
+		ID, USER_ID, TOPIC_ID
+	</sql>
+	
+</mapper>

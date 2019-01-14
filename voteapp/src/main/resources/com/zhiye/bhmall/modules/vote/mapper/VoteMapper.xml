@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.zhiye.bhmall.modules.vote.mapper.VoteMapper">
+  <resultMap id="BaseResultMap" type="com.zhiye.bhmall.modules.vote.domain.Vote">
+    <id column="ID" jdbcType="INTEGER" property="id" />
+    <result column="USER_ID" jdbcType="INTEGER" property="userId" />
+    <result column="QUESTION_ID" jdbcType="INTEGER" property="questionId" />
+    <result column="OPTION_ID" jdbcType="INTEGER" property="optionId" />
+    <result column="WEIGHT" jdbcType="INTEGER" property="weight" />
+    <result column="VOTED_USER_ID" jdbcType="INTEGER" property="votedUserId" />
+  </resultMap>
+  
+  <resultMap id="VoteResultMap" type="com.zhiye.bhmall.modules.vote.vo.VoteResultVo">
+    <result column="question_name" jdbcType="VARCHAR" property="questionName" />
+    <result column="option_name" jdbcType="VARCHAR" property="optionName" />
+    <result column="vote_num" jdbcType="INTEGER" property="voteNum" />
+    <result column="voted_user_id" jdbcType="INTEGER" property="votedUserId" />
+    <result column="QUESTION_ID" jdbcType="INTEGER" property="questionId" />
+  </resultMap>
+  
+  <resultMap id="VoteResultMap1" extends="BaseResultMap" type="com.zhiye.bhmall.modules.vote.vo.PersonVoteResultVo">
+    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+    <result column="question_name" jdbcType="VARCHAR" property="questionName" />
+    <result column="option_name" jdbcType="VARCHAR" property="optionName" />
+  </resultMap>
+  
+  <insert id="insertBatch">
+    INSERT INTO vote
+            (USER_ID, QUESTION_ID,OPTION_ID,WEIGHT,VOTED_USER_ID)
+    VALUES
+    <foreach collection ="list" item="vote" separator =",">
+         (#{vote.userId}, #{vote.questionId}, #{vote.optionId}, #{vote.weight}, #{vote.votedUserId})
+    </foreach >
+  </insert>
+  
+  <select id="selectVoteResult" resultMap="VoteResultMap">
+	SELECT
+		b.QUESTION_ID, 
+		b.voted_user_id, 
+		b.vote_num, 
+		c.`NAME` AS question_name,
+		d.`NAME` AS option_name
+	FROM
+		(
+			SELECT
+				a.QUESTION_ID,
+				a.voted_user_id,
+				SUM(
+					CASE a.WEIGHT
+					WHEN NOT NULL THEN
+						0
+					ELSE
+						a.WEIGHT
+					END
+				) AS vote_num
+			FROM
+				vote AS a
+			GROUP BY
+				a.voted_user_id,a.QUESTION_ID
+		) AS b
+	LEFT JOIN question AS c ON b.QUESTION_ID = c.ID
+	LEFT JOIN `user` AS d ON b.voted_user_id = d.id
+	LEFT JOIN topic AS e ON c.TOPIC_ID = e.id
+	 WHERE
+		e.is_valid = 1
+	AND e.id =2 ORDER BY
+		c.ID ASC,
+		b.vote_num DESC
+  </select>
+  <select id="selectVotesByUserId" resultMap="VoteResultMap1">
+  	SELECT
+		a.*, b.`NAME` AS option_name,
+		c.`NAME` AS question_name
+	FROM
+		vote AS a
+	LEFT JOIN USER AS b ON A.VOTED_USER_ID = b.ID
+	LEFT JOIN question c ON a.QUESTION_ID = c.ID
+	LEFT JOIN TOPIC AS d ON c.topic_id = d.id
+	WHERE
+		a.USER_ID = #{userId} and d.id=#{topicId}
+  </select>
+  <select id="selectUsersByVotedUserId" resultType="com.zhiye.bhmall.modules.vote.domain.User">
+  	SELECT
+		c.*
+	FROM
+		(
+			SELECT
+				a.USER_ID
+			FROM
+				vote AS a
+			WHERE
+				a.VOTED_USER_ID = #{votedUserId} and a.question_id=#{questionId}
+		) AS b
+	LEFT JOIN `user` AS c ON b.user_id = c.id
+  </select>
+</mapper>

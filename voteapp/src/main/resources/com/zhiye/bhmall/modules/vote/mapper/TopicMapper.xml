@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper
+	namespace="com.zhiye.bhmall.modules.vote.mapper.TopicMapper">
+	<resultMap id="BaseResultMap"
+		type="com.zhiye.bhmall.modules.vote.domain.Topic">
+		<id column="id" jdbcType="INTEGER" property="id" />
+		<result column="name" jdbcType="VARCHAR" property="name" />
+		<result column="is_valid" jdbcType="TINYINT" property="isValid" />
+		<result column="start_time" jdbcType="TIMESTAMP"
+			property="startTime" />
+		<result column="end_time" jdbcType="TIMESTAMP"
+			property="endTime" />
+	</resultMap>
+
+	<resultMap id="ResultMap"
+		type="com.zhiye.bhmall.modules.vote.vo.TopicVo">
+		<id column="id" jdbcType="INTEGER" property="id" />
+		<result column="name" jdbcType="VARCHAR" property="name" />
+		<result column="is_valid" jdbcType="TINYINT" property="isValid" />
+		<result column="start_time" jdbcType="TIMESTAMP"
+			property="startTime" />
+		<result column="end_time" jdbcType="TIMESTAMP"
+			property="endTime" />
+		<collection property="questions" javaType="ArrayList"
+			ofType="com.zhiye.bhmall.modules.vote.vo.QuestionVo">
+			<id column="QUES_ID" jdbcType="INTEGER" property="id" />
+		    <result column="QUES_NAME" jdbcType="VARCHAR" property="name" />
+		    <result column="QUES_CODE" jdbcType="VARCHAR" property="code" />
+		    <result column="QUES_STATUS" jdbcType="INTEGER" property="status" />
+		    <result column="QUES_TYPE" jdbcType="INTEGER" property="type" />
+		    <result column="QUES_IS_VALID" jdbcType="INTEGER" property="isValid" />
+		    <result column="QUES_CREATE_TIME" jdbcType="TIMESTAMP" property="createTime" />
+		    <result column="QUES_UPDATE_TIME" jdbcType="TIMESTAMP" property="updateTime" />
+		    <result column="QUES_DESCRIPTION" jdbcType="VARCHAR" property="description" />
+		    <result column="QUES_EXPIRED_DATE" jdbcType="TIMESTAMP" property="expiredDate" />
+		    <result column="QUES_TOPIC_ID" jdbcType="INTEGER" property="topicId" />
+		    
+			<collection property="options" javaType="ArrayList"
+				ofType="com.zhiye.bhmall.modules.vote.vo.OptionVo">
+				<id column="OPTI_ID" jdbcType="INTEGER" property="id" />
+			    <result column="OPTI_NAME" jdbcType="VARCHAR" property="name" />
+			    <result column="OPTI_CODE" jdbcType="VARCHAR" property="code" />
+			    <result column="OPTI_STATUS" jdbcType="INTEGER" property="status" />
+			    <result column="OPTI_TYPE" jdbcType="INTEGER" property="type" />
+			    <result column="OPTI_IS_VALID" jdbcType="INTEGER" property="isValid" />
+			    <result column="OPTI_CREATE_TIME" jdbcType="TIMESTAMP" property="createTime" />
+			    <result column="OPTI_UPDATE_TIME" jdbcType="TIMESTAMP" property="updateTime" />
+			    <result column="OPTI_DESCRIPTION" jdbcType="VARCHAR" property="description" />
+			    <result column="OPTI_QUESTION_ID" jdbcType="INTEGER" property="questionId" />
+			    <result column="OPTI_DEPARTMENT_NAME" jdbcType="VARCHAR" property="departmentName" />
+			</collection>
+		</collection>
+
+	</resultMap>
+
+	<select id="selectTopics" resultMap="ResultMap">
+		SELECT
+			a.ID,
+			a. NAME,
+			a.IS_VALID,
+			a.START_TIME,
+			a.END_TIME,
+			b.ID AS QUES_ID,
+			b. NAME AS QUES_NAME,
+			b. CODE AS QUES_CODE,
+			b. STATUS AS QUES_STATUS,
+			b.TYPE AS QUES_TYPE,
+			b.IS_VALID AS QUES_IS_VALID,
+			b.CREATE_TIME AS QUES_CREATE_TIME,
+			b.UPDATE_TIME AS QUES_UPDATE_TIME,
+			b.DESCRIPTION AS QUES_DESCRIPTION,
+			b.EXPIRED_DATE AS QUES_EXPIRED_DATE,
+			b.TOPIC_ID AS QUES_TOPIC_ID
+			
+		FROM
+			topic AS a
+		INNER JOIN question AS b ON a.id = b.TOPIC_ID
+		WHERE
+			a.is_valid = 1
+		AND a.ID = 2
+		ORDER BY
+			b.ID ASC
+	</select>
+	
+</mapper>
