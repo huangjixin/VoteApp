@@ -66,7 +66,7 @@ public class OptionController {
 		return list;
 	}
 	
-	@ApiOperation(value = "查询全部有departmentName的用户", notes = "")
+	@ApiOperation(value = "查询全部有departmentName的用户 ", notes = "")
 	@GetMapping(value = "selectByDepartmentNameNotNull")
 	@ResponseBody
 	public List<User> selectByDepartmentNameNotNull() {

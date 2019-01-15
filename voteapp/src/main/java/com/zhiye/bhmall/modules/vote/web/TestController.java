@@ -1,13 +1,13 @@
 package com.zhiye.bhmall.modules.vote.web;
 
 import java.io.File;
-import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
 
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -30,8 +30,36 @@ public class TestController {
 	@PostMapping(value = "testPost")
 	@ResponseBody
 	public Response testPost(@RequestParam(name = "username") String username) {
+		username="20190115123"+username;
 		Response response = new Response();
 		response.setData(username);
+		return response;
+	}
+	
+	@ApiOperation(value = "测试对象123无误", notes = "测试对象12311")
+	@GetMapping(value = "hello")
+	@ResponseBody
+	public Response hello() {
+		Response response = new Response();
+		response.setData("hello world！黄记新！！！！我问问");
+		return response;
+	}
+	
+	@ApiOperation(value = "测试对象1234", notes = "测试对象1231")
+	@GetMapping(value = "hell")
+	@ResponseBody
+	public Response hell() {
+		Response response = new Response();
+		response.setData("hello world！黄记新");
+		return response;
+	}
+	
+	@ApiOperation(value = "测试对象123413", notes = "测试对象123132")
+	@GetMapping(value = "hell23")
+	@ResponseBody
+	public Response hell132() {
+		Response response = new Response();
+		response.setData("hello world！黄记新");
 		return response;
 	}
 	
