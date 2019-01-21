@@ -10,6 +10,7 @@ import org.springframework.core.env.Environment;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 
 import com.alibaba.druid.pool.DruidDataSource;
+import com.zhiye.bhmall.modules.vote.socket.SocketServer;
 
 import springfox.documentation.swagger2.annotations.EnableSwagger2;
 import tk.mybatis.spring.annotation.MapperScan;
@@ -22,6 +23,9 @@ public class VoteappApplication {
 
 	public static void main(String[] args) {
 		SpringApplication.run(VoteappApplication.class, args);
+		//起socket服务
+		SocketServer server = new SocketServer();
+		server.startSocketServer(9998);
 	}
 
 	@Autowired
